@@ -30,7 +30,11 @@ RUN apt-get update -qq && \
 # ── Install onnxruntime-gpu ───────────────────────────────────────────────────
 # Replace the CPU-only onnxruntime that ships in frigate:stable.
 # 1.17.1 is the last release with CUDA 11.x support (Pascal SM6.1 compatible).
-RUN pip3 install --break-system-packages --force-reinstall onnxruntime-gpu==1.17.1
+# Pin numpy<2 because onnxruntime 1.17.1 was compiled against NumPy 1.x;
+# importing it under NumPy 2.x fails with `AttributeError: _ARRAY_API not found`.
+RUN pip3 install --break-system-packages --force-reinstall \
+        "onnxruntime-gpu==1.17.1" \
+        "numpy>=1.24.2,<2"
 
 # ── Patch detection_runners.py for Pascal CUDA Graph fallback ─────────────────
 # Pascal GPUs can't capture CUDA Graphs with yolov8n (4 Memcpy nodes).
