@@ -52,7 +52,8 @@ def get_openvino_available_devices() -> list[str]:
         available_devices = core.available_devices
         logger.debug(f"OpenVINO available devices: {available_devices}")
         return available_devices
-    except Exception as e:\n        logger.warning(f"Failed to get OpenVINO available devices: {e}")
+    except Exception as e:
+        logger.warning(f"Failed to get OpenVINO available devices: {e}")
         return []
 
 
@@ -240,7 +241,8 @@ class OpenVINOModelRunner(BaseModelRunner):
         if device == "NPU" and OpenVINOModelRunner.is_detection_model(model_type):
             try:
                 self.ov_core.set_property(device, {"NPU_TURBO": "YES"})
-            except Exception as e:\n                logger.debug(f"NPU_TURBO not supported by driver: {e}")
+            except Exception as e:
+                logger.debug(f"NPU_TURBO not supported by driver: {e}")
 
         with _OPENVINO_LOCK:
             self.compiled_model = self.ov_core.compile_model(model=model_path, device_name=device)
@@ -319,7 +321,8 @@ class OpenVINOModelRunner(BaseModelRunner):
 
                 try:
                     self.infer_request.infer()
-                except Exception as e:\n                    logger.error(f"Error during OpenVINO inference: {e}")
+                except Exception as e:
+                    logger.error(f"Error during OpenVINO inference: {e}")
                     return []
 
             outputs = []
@@ -350,7 +353,8 @@ class RKNNModelRunner(BaseModelRunner):
         except ImportError:
             logger.error("RKNN Lite not available")
             raise ImportError("RKNN Lite not available")
-        except Exception as e:\n            logger.error(f"Error loading RKNN model: {e}")
+        except Exception as e:
+            logger.error(f"Error loading RKNN model: {e}")
             raise
 
     def get_input_names(self) -> list[str]:
@@ -396,7 +400,8 @@ class RKNNModelRunner(BaseModelRunner):
                         rknn_inputs.append(inputs[name])
             outputs = self.rknn.inference(inputs=rknn_inputs)
             return outputs
-        except Exception as e:\n            logger.error(f"Error during RKNN inference: {e}")
+        except Exception as e:
+            logger.error(f"Error during RKNN inference: {e}")
             raise
 
     def __del__(self):
