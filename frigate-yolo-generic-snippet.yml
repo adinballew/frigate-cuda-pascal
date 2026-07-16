@@ -1,0 +1,50 @@
+# Starter snippet for testing a DIY YOLO -> ONNX model with Frigate.
+# Merge carefully into your existing Frigate config; do not replace your full config blindly.
+# Target: ONNX yolo-generic, 640 NCHW RGB float.
+
+model:
+  path: /config/models/frontdoor_backyard_v1.onnx
+  labelmap_path: /config/models/frontdoor_backyard_labels.txt
+  input_tensor: nchw
+  input_pixel_format: rgb
+  width: 640
+  height: 640
+  model_type: yolo-generic
+
+# Example detector block for the current custom Frigate image.
+# Verified image supports ONNXRuntime providers: TensorRT, CUDA, CPU.
+# Keep detector name/type aligned with the existing config unless intentionally changing it.
+detectors:
+  onnx:
+    type: onnx
+
+# Scoped camera reminder: train/evaluate only FrontDoor and Backyard for this model.
+# Patio is intentionally excluded from dataset collection and evaluation.
+cameras:
+  FrontDoor:
+    detect:
+      enabled: true
+  Backyard:
+    detect:
+      enabled: true
+  Patio:
+    # Excluded from this custom model's training scope.
+    # Keep existing production config behavior as appropriate.
+    detect:
+      enabled: false
+
+objects:
+  track:
+    - person
+    - package
+    - car
+    - truck
+    - van
+    - dog
+    - cat
+    - bird
+    - bicycle
+    - motorcycle
+    - backpack
+    - suitcase
+    - waste_bin
