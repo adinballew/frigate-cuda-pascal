@@ -36,11 +36,19 @@ import shlex
 import socket
 import sys
 import tarfile
+import threading
 import time
 import urllib.error
 import urllib.parse
 import urllib.request
 from pathlib import Path
+
+
+def atomic_write_bytes(path: Path, data: bytes) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    tmp = path.with_name(f".{path.name}.tmp-{threading.get_ident()}")
+    tmp.write_bytes(data)
+    tmp.replace(path)
 
 # ---------------------------------------------------------------------------
 # Constants
