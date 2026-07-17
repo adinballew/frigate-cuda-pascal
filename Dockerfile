@@ -42,9 +42,4 @@ RUN pip3 install --break-system-packages --force-reinstall \
 # in a try/except and falls back to plain CUDAExecutionProvider.
 COPY patches/detection_runners.py /opt/frigate/frigate/detectors/detection_runners.py
 
-# ── Bake in custom model + labeler scripts ──────────────────────────────────
-# These scripts run inside the Frigate container (or via docker exec from Cronicle).
-# They use the Docker socket to talk to the frigate-model-trainer container.
-COPY frigate-custom-model/ /opt/frigate/custom-model/
-COPY frigate-labeler/ /opt/frigate/labeler/
-COPY labels.txt /opt/frigate/labels.txt
+
