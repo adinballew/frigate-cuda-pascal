@@ -1,7 +1,7 @@
 [tool.commitizen]
 name = "cz_conventional_commits"
 version = "0.1.0"
-version_files = [".cz.toml:version"]
+version_files = ["pyproject.toml:version", ".cz.toml:version"]
 changelog_file = "CHANGELOG.md"
 changelog_incremental = true
 update_changelog_on_bump = true
