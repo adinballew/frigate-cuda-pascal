@@ -1,0 +1,9 @@
+[project]
+name = "frigate-cuda-pascal"
+version = "0.1.0"
+description = "Custom Frigate image: CUDA 11.8 + onnxruntime-gpu for Pascal GPUs"
+requires-python = ">=3.10"
+dependencies = []
+
+[dependency-groups]
+dev = []
