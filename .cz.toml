@@ -1,0 +1,20 @@
+[tool.commitizen]
+name = "cz_conventional_commits"
+version = "0.1.0"
+version_files = [".cz.toml:version"]
+changelog_file = "CHANGELOG.md"
+changelog_incremental = true
+update_changelog_on_bump = true
+major_version_zero = true
+tag_format = "v$version"
+
+[tool.commitizen.change_type_map]
+feat = "Features"
+fix = "Bug Fixes"
+docs = "Documentation"
+refactor = "Refactoring"
+perf = "Performance"
+build = "Build System"
+ci = "CI"
+chore = "Chores"
+revert = "Reverts"
