@@ -8,7 +8,11 @@ import sys
 
 path = "/opt/frigate/frigate/detectors/detection_runners.py"
 
-with open(path) as f:\n    src = f.read()\n\nOLD = '''        options[0] = {\n            **options[0],
+with open(path) as f:
+    src = f.read()
+
+OLD = '''        options[0] = {
+            **options[0],
             "enable_cuda_graph": True,
         }
         return CudaGraphRunner(
@@ -50,4 +54,6 @@ if OLD not in src:
     sys.exit(0)
 
 src = src.replace(OLD, NEW)
-with open(path, "w") as f:\n    f.write(src)\nprint("Patch applied to detection_runners.py")
+with open(path, "w") as f:
+    f.write(src)
+print("Patch applied to detection_runners.py")
