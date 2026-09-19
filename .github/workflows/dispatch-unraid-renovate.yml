@@ -1,0 +1,27 @@
+name: Dispatch unraid Renovate
+
+# A merge here moves nothing in unraid: the submodule gitlink is only bumped by
+# unraid's Renovate run. Dispatch it so the bump PR opens now instead of at the
+# next daily schedule.
+
+on:
+  push:
+    branches: [main]
+
+permissions: {}
+
+concurrency:
+  group: dispatch-unraid-renovate
+  cancel-in-progress: false
+
+jobs:
+  dispatch:
+    # A hosted runner: a runner registration belongs to one repository, and this
+    # is one billed minute per merge.
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Run unraid's Renovate workflow
+        env:
+          GH_TOKEN: ${{ secrets.RENOVATE_TOKEN }}
+        run: gh workflow run renovate.yml --repo adinballew/unraid --ref main
