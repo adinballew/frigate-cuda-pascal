@@ -9,7 +9,6 @@ from typing import Any
 
 import numpy as np
 import onnxruntime as ort  # type: ignore[reportMissingImports]
-
 from frigate.util.model import get_ort_providers  # type: ignore[reportMissingImports]
 from frigate.util.rknn_converter import (  # type: ignore[reportMissingImports]
     auto_convert_model,
@@ -33,9 +32,7 @@ def get_ort_session_options(
 ) -> ort.SessionOptions | None:
     if is_complex_model:
         sess_options = ort.SessionOptions()
-        sess_options.graph_optimization_level = (
-            ort.GraphOptimizationLevel.ORT_ENABLE_BASIC
-        )
+        sess_options.graph_optimization_level = ort.GraphOptimizationLevel.ORT_ENABLE_BASIC
         return sess_options
     return None
 
@@ -193,9 +190,7 @@ class CudaGraphRunner(BaseModelRunner):
             self._io_binding = self._session.io_binding()
             self._input_name = input_name
             self._output_names = [o.name for o in self._session.get_outputs()]
-            self._input_ortvalue = ort.OrtValue.ortvalue_from_numpy(
-                tensor_input, "cuda", self._cuda_device_id
-            )
+            self._input_ortvalue = ort.OrtValue.ortvalue_from_numpy(tensor_input, "cuda", self._cuda_device_id)
             assert self._io_binding is not None
             self._io_binding.bind_ortvalue_input(self._input_name, self._input_ortvalue)
             assert self._output_names is not None
@@ -316,11 +311,7 @@ class OpenVINOModelRunner(BaseModelRunner):
             if self.model_type in [EnrichmentModelTypeEnum.arcface.value]:
                 self.infer_request = self.compiled_model.create_infer_request()
 
-            if (
-                len(input) == 1
-                and len(self.compiled_model.inputs) == 1
-                and self.input_tensor is not None
-            ):
+            if len(input) == 1 and len(self.compiled_model.inputs) == 1 and self.input_tensor is not None:
                 input_data = list(input.values())[0]
                 np.copyto(self.input_tensor.data, input_data)
                 self.infer_request.infer(self.input_tensor)
@@ -430,7 +421,7 @@ class RKNNModelRunner(BaseModelRunner):
                         face_data = input[name]
                         if len(face_data.shape) == 4 and face_data.shape[1] == 3:
                             face_data = np.transpose(face_data, (0, 2, 3, 1))
-                        face_data = (((face_data + 1.0) * 127.5).clip(0, 255).astype(np.uint8))
+                        face_data = ((face_data + 1.0) * 127.5).clip(0, 255).astype(np.uint8)
                         rknn_inputs.append(face_data)
                     else:
                         rknn_inputs.append(input[name])
@@ -448,9 +439,7 @@ class RKNNModelRunner(BaseModelRunner):
                 pass
 
 
-def get_optimized_runner(
-    model_path: str, device: str | None, model_type: str, **kwargs
-) -> BaseModelRunner:
+def get_optimized_runner(model_path: str, device: str | None, model_type: str, **kwargs) -> BaseModelRunner:
     """Get an optimized runner for the hardware."""
     device = device or "AUTO"
 
@@ -465,10 +454,7 @@ def get_optimized_runner(
         if device != "CPU" and is_openvino_gpu_npu_available():
             return OpenVINOModelRunner(model_path, device, model_type, **kwargs)
 
-    if (
-        CudaGraphRunner.is_model_supported(model_type)
-        and providers[0] == "CUDAExecutionProvider"
-    ):
+    if CudaGraphRunner.is_model_supported(model_type) and providers[0] == "CUDAExecutionProvider":
         # Pascal GPUs (SM6.x) cannot capture CUDA Graphs due to Memcpy nodes in
         # yolov8n. Wrap the attempt and fall back to plain CUDAExecutionProvider.
         try:
@@ -486,8 +472,7 @@ def get_optimized_runner(
             )
         except Exception as cuda_graph_err:
             logger.warning(
-                f"CUDA Graph capture failed ({cuda_graph_err}); "
-                "falling back to CUDA EP without graph capture"
+                f"CUDA Graph capture failed ({cuda_graph_err}); falling back to CUDA EP without graph capture"
             )
             options[0] = {k: v for k, v in options[0].items() if k != "enable_cuda_graph"}
 
@@ -502,9 +487,7 @@ def get_optimized_runner(
     return ONNXModelRunner(
         ort.InferenceSession(
             model_path,
-            sess_options=get_ort_session_options(
-                ONNXModelRunner.is_cpu_complex_model(model_type)
-            ),
+            sess_options=get_ort_session_options(ONNXModelRunner.is_cpu_complex_model(model_type)),
             providers=providers,
             provider_options=options,
         ),
