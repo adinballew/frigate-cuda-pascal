@@ -7,3 +7,31 @@ dependencies = []
 
 [dependency-groups]
 dev = []
+# Pinned to the versions the trantor workspace gates on, so a rule change
+# lands here as a deliberate bump. CI installs it with `--group lint`.
+lint = [
+    "ruff==0.16.8",
+    "ty==0.0.82",
+]
+
+[tool.ruff]
+line-length = 120
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "UP", "PLC0415"]
+ignore = ["E501", "E701", "E722", "F541", "UP017", "UP031"]
+
+[tool.ruff.lint.per-file-ignores]
+# A patched copy of Frigate's own runner module. Its imports of `frigate.*`,
+# `openvino` and `rknnlite` sit inside methods on purpose: they are optional
+# hardware libraries or would import Frigate before it finished loading.
+"patches/detection_runners.py" = ["PLC0415"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+
+[tool.ty.analysis]
+# These modules exist only inside the Frigate image this repo patches.
+allowed-unresolved-imports = ["frigate.**", "openvino", "rknnlite.**", "onnxruntime", "numpy"]
