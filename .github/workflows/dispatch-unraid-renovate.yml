@@ -24,4 +24,4 @@ jobs:
       - name: Run unraid's Renovate workflow
         env:
           GH_TOKEN: ${{ secrets.RENOVATE_TOKEN }}
-        run: gh workflow run renovate.yml --repo adinballew/unraid --ref main
+        run: gh workflow run renovate.yml --repo trantor-org/unraid --ref main
