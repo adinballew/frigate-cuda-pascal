@@ -30,6 +30,14 @@ detectors:
     device: cuda
 ```
 
+## Tests
+
+```bash
+uv run --group dev pytest
+```
+
+The tests cover the Pascal CUDA Graph fallback in `patches/detection_runners.py` against stubbed Frigate modules. They need no GPU or image, and CI runs them in `.github/workflows/test.yml`.
+
 ## Updating upstream
 
 The `FRIGATE_VERSION` build arg defaults to `stable`. To pin a specific version, trigger the workflow manually with the desired tag (e.g. `0.15.0`).
