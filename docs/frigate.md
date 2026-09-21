@@ -41,7 +41,7 @@ for Pascal (SM6.x) GPU support.
 The image includes CUDA 11.8 + onnxruntime-gpu 1.17.1 + a Pascal CUDA Graph
 fallback patch + numpy<2 pin.
 
-Repo: <https://github.com/adinballew/frigate-cuda-pascal> (GitHub Action builds
+Repo: <https://github.com/trantor-org/frigate-cuda-pascal> (GitHub Action builds
 on push to main)
 
 ### Pascal CUDA Graph Fix
@@ -99,7 +99,7 @@ Expected output includes `CUDAExecutionProvider`.
 The image includes CUDA 11.8 + onnxruntime-gpu 1.17.1 + a Pascal CUDA Graph
 fallback patch + numpy<2 pin.
 
-Repo: <https://github.com/adinballew/frigate-cuda-pascal> (GitHub Action builds
+Repo: <https://github.com/trantor-org/frigate-cuda-pascal> (GitHub Action builds
 on push to main)
 
 ### Pascal CUDA Graph Fix
