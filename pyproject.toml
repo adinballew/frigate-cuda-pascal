@@ -6,7 +6,9 @@ requires-python = ">=3.10"
 dependencies = []
 
 [dependency-groups]
-dev = []
+dev = [
+    "pytest>=9.1.1",
+]
 # Pinned to the versions the trantor workspace gates on, so a rule change
 # lands here as a deliberate bump. CI installs it with `--group lint`.
 lint = [
@@ -35,3 +37,6 @@ indent-style = "space"
 [tool.ty.analysis]
 # These modules exist only inside the Frigate image this repo patches.
 allowed-unresolved-imports = ["frigate.**", "openvino", "rknnlite.**", "onnxruntime", "numpy"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
