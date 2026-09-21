@@ -35,7 +35,7 @@ def harness(monkeypatch):
         return SimpleNamespace(**kwargs)
 
     stubs = {
-        "numpy": stub_module("numpy"),
+        "numpy": stub_module("numpy", ndarray=object),
         "onnxruntime": stub_module(
             "onnxruntime",
             InferenceSession=make_session,
