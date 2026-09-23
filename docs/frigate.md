@@ -29,7 +29,7 @@ for Pascal (SM6.x) GPU support.
 
 | Setting | Value |
 |---------|-------|
-| Image | `ghcr.io/adinballew/frigate-cuda-pascal:stable` |
+| Image | `ghcr.io/trantor-org/frigate-cuda-pascal:stable` |
 | Detector | `device: cuda` |
 | Network | br0 ([ip-address: frigate]), ports accessed directly: 5000 (Web UI), 8554 (RTSP) |
 | GPU | NVIDIA GeForce GTX 1070 (Pascal architecture) |
@@ -93,6 +93,17 @@ Expected output includes `CUDAExecutionProvider`.
   Frigate is on br0.
 - Pascal CUDA Graph fallback may appear as a warning — expected on GTX 1070.
 - GPU usage: ~500 MiB during normal detection on GTX 1070 (8 GB VRAM).
+- **A config validation failure drops Frigate into "safe mode" silently.**
+  On this version, `cameras.<name>.snapshots.retain` accepts no `mode` key
+  (only `record.retain`/`record.alerts.retain`/`record.detections.retain`
+  do). An invalid config does not stop the container: the web/API server
+  and go2rtc still start, the Docker health check still passes, but no
+  camera is loaded — `/api/config` reports `"cameras": {}` and
+  `/api/stats` reports zero FPS for every camera, while storage/event/
+  recording cleanup are skipped. `docker logs frigate` around the last
+  startup names the exact invalid key and line number under "Config
+  Validation Errors"; a plain restart does not fix it; the on-disk config
+  at `/mnt/user/appdata/frigate/config.yml` must be corrected first.
 
 ## Custom Image
 
